@@ -1,15 +1,47 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Modal from "../../components/Modal/Modal";
 import Navbar from "../../components/Navbar/Navbar";
 import Table from "../../components/Table/Table";
 import { useFormik } from "formik";
 import { supabase } from "../../superbase";
+import useToggle from "../../utils/hooks/useToggle";
+import { ToastContainer, toast } from "react-toastify";
+import { Tab } from "@mui/material";
 
 const Home = () => {
-  const user = JSON.parse(
-    localStorage.getItem("sb-vebrfhrtuefjfwmdmaid-auth-token")
-  );
-  const userID = user.user.id;
+  const [loading, toggleLoading] = useToggle();
+  const [userID, setUserID] = useState();
+  const [user, setUser] = useState();
+
+  const fetchUser = async () => {
+    const res = await supabase.auth.getUser();
+    setUser(res);
+    console.log(user);
+    console.log(user?.data?.user?.id);
+    // ...
+    if (user) {
+      const id = user?.data?.user?.id;
+      setUserID(id);
+      console.log(userID);
+    }
+    // else {b
+    //   alert("unauthorized, please login aagin")
+    //   window.location.href = "/login";
+    // }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.data?.user === null) {
+      toast.error("Unauthorized, please log in again", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      setTimeout(() => (window.location.href = "/login"), 500);
+    }
+  }, [user?.data?.user])
 
   const formik = useFormik({
     initialValues: {
@@ -41,7 +73,7 @@ const Home = () => {
       } catch (error) {
         alert(error.message);
       }
-      window.location.href = "/home";
+      window.location.href = "/";
     },
   });
 
@@ -51,12 +83,13 @@ const Home = () => {
   return (
     <>
       <Navbar />
+      <ToastContainer />
       <Modal
         values={values}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
       />
-      <Table />
+      <Table userID={userID} />
     </>
   );
 };

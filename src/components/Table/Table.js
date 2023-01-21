@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../superbase";
 import TwitterCLDR from "twitter_cldr/full/core";
 
-const Table = () => {
+const Table = ({userID}) => {
   var TwitterCldr = require("twitter_cldr").load("en");
   var fmt = new TwitterCldr.CurrencyFormatter();
   // console.log(fmt.format(1337, { currency: "NGN" })); // 1.337,00 €
@@ -10,24 +10,20 @@ const Table = () => {
   const [tabledata, setTabledata] = useState();
   useEffect(() => {
     getProfile();
-  }, []);
+  }, [userID]);
 
   const getProfile = async () => {
     try {
-      const user = JSON.parse(
-        localStorage.getItem("sb-vebrfhrtuefjfwmdmaid-auth-token")
-      );
-      console.log(user.user);
       let { data, error, status } = await supabase
         .from("financelogs")
         .select(`id`)
-        .eq("id", user.user.id)
+        .eq("id", userID)
         .select("*");
 
       console.log(data);
 
       if (data) {
-        setTabledata(data);
+        setTabledata(data.reverse());
       }
     } catch (error) {
       alert(error.message);
@@ -67,9 +63,9 @@ const Table = () => {
             </tr>
           </thead>
           <tbody>
-            {tabledata?.map((log) => (
+            {tabledata?.map((log, index) => (
               <tr className="hover">
-                <th>{log?.SN}</th>
+                <th>{index + 1}</th>
                 <td>{fmt.format(log?.amount, { currency: "NGN" })}</td>
                 <td>{log?.description}</td>
                 <td>{log?.mode}</td>

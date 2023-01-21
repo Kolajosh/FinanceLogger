@@ -6,8 +6,8 @@ import CardComponent from "../Card/Card";
 const Navbar = () => {
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    sessionStorage.clear();
-    window.location.href = "/";
+    localStorage.clear();
+    window.location.href = "/login";
   };
   return (
     <>

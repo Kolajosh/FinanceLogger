@@ -30,32 +30,6 @@ function Register() {
   const { handleChange, handleSubmit, handleBlur, values, errors, touched } =
     formik;
 
-  //   const [formdata, setFormdata] = useState({
-  //     email: "",
-  //     password: "",
-  //   });
-
-  //   const handleChange = (e) => {
-  //     setFormdata({
-  //       ...formdata,
-  //       [e.target.name]: e.target.value,
-  //     });
-  //   };
-
-  //   const handleRegister = async () => {
-  //     try {
-  //       const response = await supabase.auth.signUp({
-  //         email: formdata?.email,
-  //         password: formdata?.password,
-  //       });
-  //       if (response.data !== "") {
-  //         console.table(response);
-  //       }
-  //     } catch (error) {
-  //       alert(error.message);
-  //     }
-  //   };
-
   return (
     <>
       <div className="flex content-center items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -130,7 +104,7 @@ function Register() {
               <p className="mt-2 text-sm text-center text-gray-600">
                 Already have an account?{" "}
                 <span className="font-semibold underline">
-                  <Link to="/">Sign in</Link>
+                  <Link to="/login">Sign in</Link>
                 </span>
               </p>
             </div>
