@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../superbase";
 import TwitterCLDR from "twitter_cldr/full/core";
 
-const Table = ({userID}) => {
+const Table = ({ userID }) => {
   var TwitterCldr = require("twitter_cldr").load("en");
   var fmt = new TwitterCldr.CurrencyFormatter();
   // console.log(fmt.format(1337, { currency: "NGN" })); // 1.337,00 €
 
-  const [tabledata, setTabledata] = useState();
+  const [tabledata, setTabledata] = useState([]);
   useEffect(() => {
     getProfile();
   }, [userID]);
@@ -30,15 +30,49 @@ const Table = ({userID}) => {
     }
   };
 
+  const totalAmount = tabledata?.reduce(
+    (accumulator, item) => accumulator + item?.amount,
+    0
+  );
+
   return (
     <>
+      <div className="flex justify-around mb-5">
+        <div className="card p-4 relative bg-base-100 shadow-md">
+          <div className="text-sm">
+            <div>
+              <p className="text-lg font-semibold">Total Expenses</p>
+              <p className="text-sm">{fmt.format(totalAmount, { currency: "NGN" })}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="card p-4 relative bg-base-100 shadow-md">
+          <div className="text-sm">
+            <div>
+              <p className="text-lg font-semibold">Monhtly Expenses</p>
+              <p className="text-sm">400000</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="card p-4 relative bg-base-100 shadow-md">
+          <div className="text-sm">
+            <div>
+              <p className="text-lg font-semibold">Yearly Expenses</p>
+              <p className="text-sm">400000</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {tabledata?.map((logs) => (
         <div className="flex justify-center mb-1 sm:hidden">
           <div className="card w-[90%] border-2 relative bg-base-100 shadow-xl">
             <div className=" flex justify-between p-4 text-sm">
               <div>
                 <h2 className="text-lg font-semibold">
-                  {fmt.format((logs?.amount), { currency: "NGN" })}
+                  {fmt.format(logs?.amount, { currency: "NGN" })}
                 </h2>
                 <p className="italic text-xs">{logs?.description}</p>
               </div>

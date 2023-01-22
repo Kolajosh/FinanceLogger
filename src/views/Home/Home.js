@@ -32,16 +32,16 @@ const Home = () => {
 
   useEffect(() => {
     fetchUser();
-  }, [user]);
+  }, [user?.data?.user]);
 
-  useEffect(() => {
-    if (user?.data?.user === null) {
-      toast.error("Unauthorized, please log in again", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      setTimeout(() => (window.location.href = "/login"), 500);
-    }
-  }, [user?.data?.user])
+  // useEffect(() => {
+  //   if (user?.data?.user === null) {
+  //     toast.error("Unauthorized, please log in again", {
+  //       position: toast.POSITION.TOP_RIGHT,
+  //     });
+  //     setTimeout(() => (window.location.href = "/login"), 500);
+  //   }
+  // }, [user?.data?.user])
 
   const formik = useFormik({
     initialValues: {
